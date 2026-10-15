@@ -2,10 +2,13 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <cstring>
 
 EPuckRobot::EPuckRobot()
   :mLeftMotor{getMotor("left wheel motor")},
-   mRightMotor{getMotor("right wheel motor")}
+   mRightMotor{getMotor("right wheel motor")},
+   mEmitter{getEmitter("emitter")},
+   mReceiver{getReceiver("receiver")}
 {
     // initialise distance sensors
     const std::array<std::string, N_DIST_SENSORS> psNames {
@@ -21,7 +24,9 @@ EPuckRobot::EPuckRobot()
     mLeftMotor->setPosition(INFINITY);
     mRightMotor->setPosition(INFINITY);
     mLeftMotor->setVelocity(0.0);
-    mRightMotor->setVelocity(0.0);   
+    mRightMotor->setVelocity(0.0); 
+    
+    mReceiver->enable(TIME_STEP);  
 }
 
 void EPuckRobot::roam (){
@@ -88,3 +93,15 @@ void EPuckRobot::run(){
     report();
   }
 }
+
+void EPuckRobot::sendMessage(const std::string& data){
+  mEmitter->send(data.c_str(),static_cast<int>(strlen(data.c_str()))+1);
+}
+std::string EPuckRobot::receiveMessage(){
+  if(mReceiver->getQueueLength() > 0){
+  std::string message {static_cast<const char*>(mReceiver->getData())};
+  mReceiver->nextPacket();
+  return message;
+ }
+ return "";
+ }

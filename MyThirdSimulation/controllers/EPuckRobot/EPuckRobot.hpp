@@ -3,8 +3,11 @@
 #include <webots/Robot.hpp>
 #include <webots/Motor.hpp>
 #include <webots/DistanceSensor.hpp>
+#include <webots/Emitter.hpp>
+#include <webots/Receiver.hpp>
 
 #include <array>
+#include <string>
 
 #include <cmath>
 
@@ -20,6 +23,8 @@ public:
 protected:
    void report() const;
    void roam();
+   void sendMessage(const std::string& data);
+   std::string receiveMessage();
    
    std::array<webots::DistanceSensor*, N_DIST_SENSORS> mPs {};
    std::array<double, N_DIST_SENSORS> mPsValues {};
@@ -28,6 +33,10 @@ protected:
    webots::Motor* mLeftMotor {};
    webots::Motor* mRightMotor {};
    double mLeftSpeed{};
-   double mRightSpeed{};
+   double mRightSpeed{}; 
+   
+private:   
+   webots::Emitter* mEmitter{};
+   webots::Receiver* mReceiver {};
     
 };

@@ -28,7 +28,14 @@ void EPuckGreenRobot::run() {
     if(k == 'T'){
       //turn right
       turn();
-    }else{
+    }else if (k == 'B'){
+     //seng message backward
+     sendMessage("Backward");
+    }
+    else if (k == 'R'){
+     //seng message roam
+     sendMessage("Roam");
+    } else{
       roam();
     }   
   }
